@@ -1,5 +1,6 @@
 echo off
 set FFMPEG_EXE_PATH=C:\bin\ffmpeg-2022-01-27-git-3c831847a8-full_build\bin\ffmpeg.exe
+set KID_EXE_PATH=C:\bin\kid3-3.9.1-win32-x64\kid3-cli.exe
 echo folder path:
 set /p folder_to_read=
 
@@ -18,7 +19,7 @@ set /p bit_rate=
 echo volume scale(%volume_scale%):
 echo sampling rate(%sampling_rate% Hz):
 echo sampling rate(%bit_rate%):
-set options=-c:a aac -c:v copy -ar %sampling_rate% -b:a %bit_rate% -filter:a "volume=%volume_scale%"
+set options=-hide_banner -loglevel info -c:a aac -c:v copy -ar %sampling_rate% -b:a %bit_rate% -filter:a "volume=%volume_scale%"
 echo options: %options%
 
 pause
@@ -28,5 +29,10 @@ FOR /R "%folder_to_read%" %%i IN (*.wav) DO (
         mkdir "%%~dpim4a"
     )
     %FFMPEG_EXE_PATH% -i "%%i" %options% "%%~dpim4a\%%~ni.m4a"
+    timeout -t 1
+    echo ----------------------------------
+    echo %KID_EXE_PATH% -c "select '%%i'" -c "get all" -c "copy 2" -c "select '%%~dpim4a\%%~ni.m4a'" -c "paste 2" -c "save" -c "get all"
+    %KID_EXE_PATH% -c "select '%%i'" -c "get all" -c "copy 2" -c "select '%%~dpim4a\%%~ni.m4a'" -c "paste 2" -c "save" -c "get all"
+    echo ----------------------------------
 )
 pause
