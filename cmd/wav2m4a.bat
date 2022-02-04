@@ -13,7 +13,7 @@ echo sampling rate(default:%sampling_rate% Hz):
 set /p sampling_rate=
 
 set bit_rate=128k
-echo sampling rate(default:%bit_rate%):
+echo bit rate(default:%bit_rate%):
 set /p bit_rate=
 
 echo volume scale(%volume_scale%):
@@ -32,14 +32,17 @@ FOR /R "%folder_to_read%" %%i IN (*.wav) DO (
 
     set wav_folder="%%~dpi"
     call set wav_folder=%%wav_folder%%
-    call echo "%%wav_folder:"=%%"
+    @REM call echo "%%wav_folder:"=%%"
 
-    call set m4a_file="%%wav_folder:"=%%m4a\%%~ni.m4a"
+    call set m4a_folder="%%wav_folder:"=%%m4a\"
+    @REM call echo "%%m4a_folder:"=%%"
+
+    call set m4a_file="%%m4a_folder:"=%%%%~ni.m4a"
     call set escape_m4a_file=%%m4a_file:'=\'%%
 
-    IF NOT EXIST "%%~dpim4a" (
-        echo Making directory:"%%~dpim4a"
-        mkdir "%%~dpim4a"
+    IF NOT EXIST "%%~dpim4a\" (
+        call echo Making directory:"%%m4a_folder:"=%%"
+        call mkdir "%%m4a_folder:"=%%"
     )
 
     @REM call echo %FFMPEG_EXE_PATH% -i %%wav_file%% %options% %%m4a_file%%
